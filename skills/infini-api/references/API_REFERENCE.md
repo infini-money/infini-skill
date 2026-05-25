@@ -40,8 +40,6 @@ See `AUTH.md`.
 | `GET` | `/card/list` | List organization cards. | HMAC + `card.create` |
 | `GET` | `/card/status?id={id}` | Query card status. | HMAC + `card.create` |
 | `POST` | `/card/reveal` | Reveal PAN/CVV/expiry. | HMAC + `card.reveal` |
-| `GET` | `/paymentlink/info?url_key={url_key}` | Get public payment link info. | Public |
-| `POST` | `/paymentlink/checkout` | Create order through public payment link. | Public |
 | `POST` | merchant webhook URL | Infini order/subscription event push. | Verify webhook HMAC |
 
 ## Endpoint Notes
@@ -49,7 +47,7 @@ See `AUTH.md`.
 - Hosted checkout uses `/order`, `/order?order_id=...`, and `/order/token/reissue`.
 - The public docs may describe token reissue as `/token/reissue`; the current public service route mounts it under the order group as `/order/token/reissue`.
 - Webhook receiving URLs are merchant-owned, not Infini paths.
-- Exclude generated-but-not-general-public routes such as `/shopify/*`, `/shoplazza/*`, `/support/*`, and internal dashboard routes under `/api/v1/*` unless the user asks about that specific integration and provides public docs for it.
+- Exclude generated-but-not-general-public routes such as `/paymentlink/*`, `/shopify/*`, `/shoplazza/*`, `/support/*`, and internal dashboard routes under `/api/v1/*` unless the user asks about that specific integration and provides public docs for it.
 
 ## Payment Method Values
 

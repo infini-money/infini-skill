@@ -6,7 +6,7 @@ AI Skill for Infini API integrations. Works with Claude Code, Cursor, and other 
 
 ## What This Skill Does
 
-- Generates secure Infini merchant API integration code for hosted checkout, payments, withdrawals, subscriptions, cards, payment links, and webhooks.
+- Generates secure Infini merchant API integration code for hosted checkout, payments, withdrawals, subscriptions, cards, and webhooks.
 - Explains and implements Infini HMAC-SHA256 request signing and webhook signature verification.
 - Helps troubleshoot API errors, status transitions, idempotency issues, webhook delivery, and checkout flows.
 - Keeps security defaults front and center: backend-only secrets, unique `request_id`, IP allowlists, webhook idempotency, and decimal-safe amounts.

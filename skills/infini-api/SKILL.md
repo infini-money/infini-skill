@@ -1,6 +1,6 @@
 ---
 name: infini-api
-description: Use when working with the Infini merchant API to integrate hosted checkout, HMAC-SHA256 authentication, order creation/querying, payment creation/querying, Binance Pay, withdrawals, subscriptions, organization cards, payment links, webhooks, error handling, or troubleshooting merchant API requests in Python, Node.js, TypeScript, Go, Java, or other backend languages.
+description: Use when working with the Infini merchant API to integrate hosted checkout, HMAC-SHA256 authentication, order creation/querying, payment creation/querying, Binance Pay, withdrawals, subscriptions, organization cards, webhooks, error handling, or troubleshooting merchant API requests in Python, Node.js, TypeScript, Go, Java, or other backend languages.
 ---
 
 # Infini API Skill
@@ -42,7 +42,6 @@ Read only the reference files needed for the user request:
 - Subscriptions: `references/SUBSCRIPTIONS.md`
 - Organization cards: `references/CARDS.md`
 - Webhooks: `references/WEBHOOKS.md`
-- Public payment links: `references/PAYMENT_LINKS.md`
 - Error handling and troubleshooting: `references/ERROR_HANDLING.md`
 - Endpoint map: `references/API_REFERENCE.md`
 
