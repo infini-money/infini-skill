@@ -28,6 +28,9 @@ Error example:
 | --- | --- | --- |
 | 400 | `40003` | Amount must be positive. |
 | 400 | `40006` | Amount must be greater than `0.01`. |
+| 400 | `40012` | Amount must be an integer for this currency. |
+| 400 | `40016` | Unsupported order currency. |
+| 400 | `40017` | Order FX rate is temporarily unavailable. |
 | 401 | `401` | Invalid HMAC signature. |
 | 404 | `40401` | Order does not exist. |
 | 409 | `40902` | `client_reference` duplicate. |
@@ -95,6 +98,9 @@ Add that IP, or the correct NAT/proxy egress IP, to the API key whitelist in the
 ## Troubleshooting Order Issues
 
 - Duplicate local retry: reuse the original `request_id`; do not create a second order accidentally.
+- Unsupported currency: use uppercase `USD`, `EUR`, `KRW`, `GBP`, `SGD`, `JPY`, `AUD`, or `HKD`.
+- Zero-decimal amount error: use whole-number amounts for `JPY` and `KRW`.
+- FX rate unavailable: retry later or fall back to `USD` if that is acceptable for the merchant flow.
 - Buyer says paid but order is processing: inspect `amount_confirming`, `amount_confirmed`, and payment transactions.
 - Expired order with payment: handle `order.late_payment` or `partial_paid` according to merchant policy.
 - Frontend redirect succeeded but webhook missing: query order and inspect webhook delivery logs/retry settings.

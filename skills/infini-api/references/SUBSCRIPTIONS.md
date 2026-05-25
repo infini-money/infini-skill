@@ -38,8 +38,9 @@ Request:
 Outer order fields:
 
 - `request_id`, `amount`, and `subscription` are required.
-- `currency` defaults to `USD`.
-- `pay_methods` follows hosted checkout payment method values.
+- `currency` defaults to `USD`. Supported order currencies: `USD`, `EUR`, `KRW`, `GBP`, `SGD`, `JPY`, `AUD`, `HKD`.
+- Use whole-number first and recurring amounts for zero-decimal currencies `JPY` and `KRW`.
+- Public subscription docs currently describe `pay_methods` as `[1]` crypto, `[2]` card, or `[1,2]`, defaulting to merchant config.
 
 Subscription fields:
 

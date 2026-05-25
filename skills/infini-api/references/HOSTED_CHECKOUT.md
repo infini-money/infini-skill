@@ -14,14 +14,20 @@ Request fields:
 | --- | --- | --- |
 | `request_id` | Yes | Merchant idempotency key. Generate and persist before calling Infini. |
 | `amount` | Yes | Fiat amount. Use a decimal string. |
-| `currency` | No | Defaults to `USD`. Supported examples include `USD`, `EUR`, `GBP`, `CAD`, `SGD`, `AUD`. |
+| `currency` | No | Defaults to `USD`. Supported order currencies: `USD`, `EUR`, `KRW`, `GBP`, `SGD`, `JPY`, `AUD`, `HKD`. |
 | `client_reference` | No | Merchant order number. Recommended unique. |
 | `order_desc` | No | Description shown in merchant records. |
 | `expires_in` | No | TTL in seconds. Backend default is used when omitted. |
 | `merchant_alias` | No | Overrides configured display name for this order. |
 | `success_url` | No | Buyer redirect after success. |
 | `failure_url` | No | Buyer redirect after failure. |
-| `pay_methods` | No | Payment modes, for example `[1]` crypto, `[2]` card, `[3]` Binance Pay, or combined. |
+| `pay_methods` | No | Payment modes: `[1]` crypto, `[2]` card, `[3]` Binance Pay, `[5]` Apple Pay, `[6]` Google Pay, or a combined list such as `[1,2,3,5,6]`. Defaults to merchant config. |
+
+Currency notes:
+
+- Use uppercase currency codes.
+- Use whole-number amounts for zero-decimal currencies `JPY` and `KRW`.
+- Use decimal strings for amounts in generated code to avoid floating-point rounding.
 
 Response data:
 
@@ -45,6 +51,7 @@ Important fields:
 
 - `status`
 - `order_amount`
+- `order_currency`
 - `amount_confirming`
 - `amount_confirmed`
 - `expires_at`
