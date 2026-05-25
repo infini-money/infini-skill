@@ -49,6 +49,10 @@ Read only the reference files needed for the user request:
 
 For generated clients:
 
+- Before generating a full project, ask how the user wants to provide credentials and secrets. Default to environment variables with a `.env.example` unless they choose a secret manager:
+  - `INFINI_API_KEY`
+  - `INFINI_API_SECRET`
+  - `INFINI_WEBHOOK_SECRET`
 - Build a small reusable request signer around `method`, exact path including query string, and optional JSON body.
 - Serialize JSON bodies consistently before calculating `Digest`; send exactly the serialized bytes that were digested.
 - Use the exact path in signatures, for example `/v1/acquiring/order?order_id=...`.

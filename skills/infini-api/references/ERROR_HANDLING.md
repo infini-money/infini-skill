@@ -37,6 +37,14 @@ Error example:
 
 ## Troubleshooting Invalid HMAC Signature
 
+If the response is:
+
+```json
+{"message":"client request can't be validated"}
+```
+
+Treat it as a request validation failure, usually caused by HMAC, headers, digest, or key mismatch.
+
 Check:
 
 - `Date` is GMT and within +/- 300 seconds.
@@ -51,9 +59,38 @@ date: {GMT_time}
 
 - There is a trailing newline after the `date` line.
 - `Digest` is base64 SHA-256 of the exact request body bytes.
+- `Digest` is present for requests with JSON bodies.
 - Body digest is not included in the signing string.
 - `Authorization` uses the same `keyId` that belongs to the secret.
+- The `keyId` used to compute the signature is exactly the same as the `keyId` in the `Authorization` header.
 - Request comes from an IP allowed by the API key.
+
+Example mismatch to look for:
+
+```text
+Key ID used for signing: IPD8A63BRAEEJPEG23IN
+Authorization keyId:     IPD8A63BRAEEJPEG23IN233
+```
+
+These are different keys, so the request cannot validate even if the HMAC code is otherwise correct.
+
+## Troubleshooting IP Whitelist Errors
+
+If the response is:
+
+```json
+{"message":"ip not in whitelist"}
+```
+
+The request reached Infini, but the source IP is not allowed by the API key's IP whitelist.
+
+To check the IP seen by Infini in sandbox, call:
+
+```text
+https://openapi-sandbox.infini.money/debug/realip
+```
+
+Add that IP, or the correct NAT/proxy egress IP, to the API key whitelist in the merchant dashboard. For Lambda, ECS, or other cloud deployments, make sure you whitelist the production egress IP, not your local machine IP.
 
 ## Troubleshooting Order Issues
 

@@ -18,15 +18,17 @@ AI Skill for Infini API integrations. Works with Claude Code, Cursor, and other 
 Project-level install:
 
 ```bash
-mkdir -p .claude/skills
-cp -r skills/infini-api .claude/skills/infini-api
+git clone git@github.com:infini-money/infini-skill.git
+mkdir -p .claude/skills/infini-api
+cp -R infini-skill/skills/infini-api/. .claude/skills/infini-api/
 ```
 
 User-level install:
 
 ```bash
-mkdir -p ~/.claude/skills
-cp -r skills/infini-api ~/.claude/skills/infini-api
+git clone git@github.com:infini-money/infini-skill.git
+mkdir -p ~/.claude/skills/infini-api
+cp -R infini-skill/skills/infini-api/. ~/.claude/skills/infini-api/
 ```
 
 ### Cursor
@@ -36,15 +38,17 @@ Cursor supports the same `SKILL.md` format and can also read `.claude/skills/` f
 Project-level install:
 
 ```bash
-mkdir -p .cursor/skills
-cp -r skills/infini-api .cursor/skills/infini-api
+git clone git@github.com:infini-money/infini-skill.git
+mkdir -p .cursor/skills/infini-api
+cp -R infini-skill/skills/infini-api/. .cursor/skills/infini-api/
 ```
 
 User-level install:
 
 ```bash
-mkdir -p ~/.cursor/skills
-cp -r skills/infini-api ~/.cursor/skills/infini-api
+git clone git@github.com:infini-money/infini-skill.git
+mkdir -p ~/.cursor/skills/infini-api
+cp -R infini-skill/skills/infini-api/. ~/.cursor/skills/infini-api/
 ```
 
 ## Example Prompts

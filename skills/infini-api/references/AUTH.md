@@ -161,6 +161,8 @@ class InfiniClient {
 - Signing `/v1/acquiring/order` but sending `/v1/acquiring/order?order_id=...`.
 - Omitting the trailing newline in the signing string.
 - Including `Digest` in the signing string.
+- Omitting the `Digest` header on a request with a JSON body.
 - Calculating `Digest` over pretty JSON but sending compact JSON, or the reverse.
+- Signing with one `keyId` but putting a different `keyId` in the `Authorization` header.
 - Using local timezone text instead of GMT.
 - Calling from frontend code and exposing the secret.
