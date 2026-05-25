@@ -62,4 +62,4 @@ For generated clients:
 
 ## Do Not Document As Public API
 
-Do not expose private implementation details, internal dashboard APIs, generated DAO code, database migrations, APISIX internals, provider credentials, or routes that are not merchant-facing public APIs. If a local `api.json` includes extra platform/plugin/CRM routes such as Shopify, Shoplazza, or support/contact endpoints, ignore them for the generic Infini merchant API unless the public docs explicitly cover that surface or the user specifically asks for that platform integration.
+Do not expose private implementation details, internal dashboard APIs, generated DAO code, database migrations, gateway internals, provider credentials, or routes that are not merchant-facing public APIs. If a generated `api.json` includes routes that are not covered by the public merchant documentation, do not add them to this skill.

@@ -2,7 +2,7 @@
 
 Concise merchant-facing endpoint map. Base path is `/v1/acquiring`.
 
-Use public documentation as the inclusion rule. A local generated `api.json` may contain additional routes for platform plugins, CRM/support forms, or implementation-specific flows; do not add those to the generic public merchant API reference unless they are also documented as public merchant APIs.
+Use public documentation as the inclusion rule. A generated `api.json` may contain routes that are not part of the public merchant API; do not add those routes to this reference unless they are also covered by the public merchant documentation.
 
 ## Authentication
 
@@ -47,7 +47,7 @@ See `AUTH.md`.
 - Hosted checkout uses `/order`, `/order?order_id=...`, and `/order/token/reissue`.
 - The public docs may describe token reissue as `/token/reissue`; the current public service route mounts it under the order group as `/order/token/reissue`.
 - Webhook receiving URLs are merchant-owned, not Infini paths.
-- Exclude generated-but-not-general-public routes such as `/paymentlink/*`, `/shopify/*`, `/shoplazza/*`, `/support/*`, and internal dashboard routes under `/api/v1/*` unless the user asks about that specific integration and provides public docs for it.
+- Exclude routes that appear only in generated service specs but are not covered by the public merchant documentation.
 
 ## Payment Method Values
 
