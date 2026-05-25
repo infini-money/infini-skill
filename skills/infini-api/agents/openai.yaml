@@ -1,0 +1,4 @@
+interface:
+  display_name: "Infini API"
+  short_description: "Build and troubleshoot Infini merchant API integrations."
+  default_prompt: "Use the Infini API skill to implement a secure merchant payment integration."
