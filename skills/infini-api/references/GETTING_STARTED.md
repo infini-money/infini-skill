@@ -11,6 +11,19 @@ Use this guide when the user is new to Infini or asks for a first working integr
 
 Merchant APIs use the `/v1/acquiring` prefix.
 
+Supported order currencies for hosted checkout:
+
+- `USD`
+- `EUR`
+- `KRW`
+- `GBP`
+- `SGD`
+- `JPY`
+- `AUD`
+- `HKD`
+
+`USD` is the default when `currency` is omitted. Use uppercase currency codes. `JPY` and `KRW` are zero-decimal currencies, so generated examples should use whole-number amounts for those currencies.
+
 ## Onboarding Flow
 
 1. Register an Infini business account.

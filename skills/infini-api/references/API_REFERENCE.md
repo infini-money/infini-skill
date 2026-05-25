@@ -56,6 +56,25 @@ Known values:
 - `1`: crypto.
 - `2`: card.
 - `3`: Binance Pay.
+- `5`: Apple Pay.
+- `6`: Google Pay.
+
+For hosted checkout order creation, `pay_methods` can be a combined list such as `[1,2,3,5,6]` when those methods are enabled for the merchant. Omit `pay_methods` to use the merchant's configured defaults.
+
+## Order Currency Values
+
+Supported order currencies:
+
+- `USD`
+- `EUR`
+- `KRW`
+- `GBP`
+- `SGD`
+- `JPY`
+- `AUD`
+- `HKD`
+
+`USD` is the default. Use whole-number amounts for zero-decimal currencies `JPY` and `KRW`.
 
 ## Status Summary
 
