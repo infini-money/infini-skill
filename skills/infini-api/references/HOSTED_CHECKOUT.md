@@ -22,6 +22,7 @@ Request fields:
 | `success_url` | No | Buyer redirect after success. |
 | `failure_url` | No | Buyer redirect after failure. |
 | `pay_methods` | No | Payment modes: `[1]` crypto, `[2]` card, `[3]` Binance Pay, `[5]` Apple Pay, `[6]` Google Pay, or a combined list such as `[1,2,3,5,6]`. Defaults to merchant config. |
+| `email` | No | Payer email. If provided, must be a valid email address; the server normalizes it to lowercase. |
 
 Currency notes:
 
@@ -56,6 +57,7 @@ Important fields:
 - `amount_confirmed`
 - `expires_at`
 - `exception_tag`
+- `email` — payer email submitted at order creation; omitted when not provided.
 - `last_paid_payment`
 
 Status values:
