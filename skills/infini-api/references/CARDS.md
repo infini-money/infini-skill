@@ -45,6 +45,14 @@ Request:
 
 Required fields: `product_id`, `top_up_amount`, `token_type`, `user_email`, `holder_name`.
 
+Product IDs:
+
+| product_id | Product |
+| --- | --- |
+| `1` | Infini Lite |
+| `2` | Infini Pro |
+| `101` | Infini AI |
+
 Response data:
 
 ```json
