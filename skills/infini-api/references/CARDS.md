@@ -1,15 +1,19 @@
 # Organization Cards
 
-Card endpoints are merchant APIs under `/v1/acquiring/card`. They require HMAC authentication and card-specific permissions.
+Card endpoints are merchant APIs under the independent `/v2/cards` prefix. They require HMAC authentication and card-specific permissions.
 
 ## Identifier Rule
 
 The merchant-facing card identifier is always `id`:
 
-- `data.id` from `POST /v1/acquiring/card/apply`
-- `cards[].id` from `GET /v1/acquiring/card/list`
-- `id` passed to `GET /v1/acquiring/card/status`
-- `id` passed to `POST /v1/acquiring/card/reveal`
+- `data.id` from `POST /v2/cards/apply`
+- `cards[].id` from `GET /v2/cards/list`
+- `id` passed to `GET /v2/cards/status`
+- `id` passed to `POST /v2/cards/reveal`
+- `id` passed to `POST /v2/cards/top-up`
+- `id` passed to `POST /v2/cards/redeem`
+- `id` passed to `POST /v2/cards/freeze`
+- `id` passed to `POST /v2/cards/unfreeze`
 
 Do not invent or expose other internal card identifiers.
 
@@ -17,14 +21,14 @@ Do not invent or expose other internal card identifiers.
 
 | Permission | Endpoints |
 | --- | --- |
-| `card.create` | Apply, list, and status. |
+| `card.create` | Apply, list, status, top up, redeem, freeze, and unfreeze. |
 | `card.reveal` | Reveal PAN/CVV/expiry. |
 
 API keys with card permissions should have a non-empty IP allowlist.
 
 ## Apply Card
 
-`POST /v1/acquiring/card/apply`
+`POST /v2/cards/apply`
 
 Request:
 
@@ -56,7 +60,7 @@ Response data:
 
 ## List Cards
 
-`GET /v1/acquiring/card/list?status=active,pending&card_alias=Travel&page=1&page_size=20`
+`GET /v2/cards/list?status=active,pending&card_alias=Travel&page=1&page_size=20`
 
 Response data includes `cards`, `total`, `page`, `page_size`, and `total_pages`.
 
@@ -75,7 +79,7 @@ Card item fields include:
 
 ## Get Card Status
 
-`GET /v1/acquiring/card/status?id={id}`
+`GET /v2/cards/status?id={id}`
 
 Poll after apply until `status` becomes `active`.
 
@@ -89,7 +93,7 @@ Status values:
 
 ## Reveal Card
 
-`POST /v1/acquiring/card/reveal`
+`POST /v2/cards/reveal`
 
 Request:
 
@@ -116,3 +120,97 @@ Sensitive data rules:
 - Do not persist CVV.
 - Return reveal data only to authorized, audited server-side flows.
 - Use `card.reveal` only when the business case requires it.
+
+## Top Up Card
+
+`POST /v2/cards/top-up`
+
+Request:
+
+```json
+{
+  "id": "a441831c-a5c7-4bed-8f61-793738afd5bc",
+  "amount": "50.00",
+  "token_type": "USDT",
+  "note": "Top up for campaign budget"
+}
+```
+
+Required fields: `id`, `amount`, `token_type`.
+
+Response data:
+
+```json
+{
+  "tx_id": "tx_123",
+  "card_balance": "150.25"
+}
+```
+
+## Redeem Card
+
+`POST /v2/cards/redeem`
+
+Request:
+
+```json
+{
+  "id": "a441831c-a5c7-4bed-8f61-793738afd5bc",
+  "amount": "20.00",
+  "token_type": "USDT",
+  "note": "Redeem unused balance"
+}
+```
+
+Required fields: `id`, `amount`, `token_type`.
+
+Response data:
+
+```json
+{
+  "tx_id": "tx_123",
+  "card_balance": "80.25"
+}
+```
+
+## Freeze Card
+
+`POST /v2/cards/freeze`
+
+Request:
+
+```json
+{
+  "id": "a441831c-a5c7-4bed-8f61-793738afd5bc"
+}
+```
+
+Response data:
+
+```json
+{
+  "success": true,
+  "message": "Card frozen"
+}
+```
+
+## Unfreeze Card
+
+`POST /v2/cards/unfreeze`
+
+Request:
+
+```json
+{
+  "id": "a441831c-a5c7-4bed-8f61-793738afd5bc"
+}
+```
+
+Response data:
+
+```json
+{
+  "success": true,
+  "message": "Card unfrozen"
+}
+```
