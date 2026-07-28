@@ -13,7 +13,8 @@ API basics:
 
 - Production base URL: `https://openapi.infini.money`
 - Sandbox base URL: `https://openapi-sandbox.infini.money`
-- Merchant API prefix: `/v1/acquiring` for acquiring, payments, withdrawals, and subscriptions
+- Merchant API prefix: `/v1/acquiring` for hosted checkout, payments, subscriptions, and legacy fund withdrawals
+- Fund API prefix: `/v2/funds` for organization fund withdrawals, fees, and balances
 - Card API prefix: `/v2/cards`
 - Standard response envelope: `code`, `message`, `data`
 
@@ -57,6 +58,7 @@ For generated clients:
 - Build a small reusable request signer around `method`, exact path including query string, and optional JSON body.
 - Serialize JSON bodies consistently before calculating `Digest`; send exactly the serialized bytes that were digested.
 - Use the exact path in signatures, for example `/v1/acquiring/order?order_id=...`.
+- For fund APIs, use the exact `/v2/funds/...` path in signatures for new integrations. Keep `/v1/acquiring/fund/withdraw` only for backward-compatible legacy flows.
 - For card APIs, use the exact `/v2/cards/...` path in signatures, not `/v1/acquiring/card/...`.
 - Check both HTTP status and response `code`; business success is `code === 0`.
 - Keep hosted checkout as the default recommendation. Use payment APIs only when the merchant explicitly needs programmatic payment address or Binance Pay creation.
