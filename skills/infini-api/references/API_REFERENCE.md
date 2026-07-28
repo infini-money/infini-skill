@@ -29,8 +29,8 @@ See `AUTH.md`.
 | `GET` | `/payment/list?order_id={order_id}` | List order payments. | HMAC |
 | `POST` | `/payment/binance` | Create Binance Pay payment. | HMAC |
 | `GET` | `/payment/binance?prepay_id={prepay_id}` | Query Binance Pay status. | HMAC |
-| `POST` | `/fund/withdraw` | Apply withdraw. | HMAC |
-| `GET` | `/fund/withdraw?request_id={request_id}` | Query withdraw status. | HMAC |
+| `POST` | `/fund/withdraw` | Apply withdraw. | HMAC + `fund.withdraw` |
+| `GET` | `/fund/withdraw?request_id={request_id}` | Query withdraw status. | HMAC + `fund.withdraw` |
 | `POST` | `/subscription` | Create subscription and first checkout order. | HMAC |
 | `GET` | `/subscription?merchant_sub_id={merchant_sub_id}` | Query subscription. | HMAC |
 | `POST` | `/subscription/cancel` | Cancel subscription. | HMAC |

@@ -2,6 +2,12 @@
 
 Withdraw APIs move merchant funds from Infini to an external wallet address.
 
+## Permissions
+
+| Permission | Endpoints |
+| --- | --- |
+| `fund.withdraw` | `POST /v1/acquiring/fund/withdraw`, `GET /v1/acquiring/fund/withdraw?request_id={request_id}` |
+
 ## Apply Withdraw
 
 `POST /v1/acquiring/fund/withdraw`
@@ -88,5 +94,5 @@ Fees are deducted in the same token type.
 
 - Never initiate withdraws from frontend code.
 - Confirm destination addresses in merchant systems before calling Infini.
-- Use API keys with minimum withdrawal permissions and strict IP allowlists.
+- Use API keys with the `fund.withdraw` permission and strict IP allowlists.
 - Poll status until terminal state and keep local audit logs.
