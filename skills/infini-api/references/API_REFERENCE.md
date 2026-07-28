@@ -43,6 +43,8 @@ See `AUTH.md`.
 | `POST` | `/v2/cards/apply` | Apply organization card. | HMAC + `card.create` |
 | `GET` | `/v2/cards/list` | List organization cards. | HMAC + `card.create` |
 | `GET` | `/v2/cards/status?id={id}` | Query card status. | HMAC + `card.create` |
+| `POST` | `/v2/cards/status/batch` | Batch query card statuses. | HMAC + `card.create` |
+| `GET` | `/v2/cards/transactions?id={id}` | List card transactions. | HMAC + `card.create` |
 | `POST` | `/v2/cards/reveal` | Reveal PAN/CVV/expiry. | HMAC + `card.reveal` |
 | `POST` | `/v2/cards/top-up` | Top up organization card. | HMAC + `card.create` |
 | `POST` | `/v2/cards/redeem` | Redeem funds from organization card. | HMAC + `card.create` |

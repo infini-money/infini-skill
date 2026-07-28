@@ -163,5 +163,5 @@ Legacy notes:
 
 - Never initiate withdraws from frontend code.
 - Confirm destination addresses in merchant systems before calling Infini.
-- Use API keys with minimum withdrawal permissions and strict IP allowlists.
+- Use API keys with the `fund.withdraw` permission and strict IP allowlists.
 - Poll status until terminal state and keep local audit logs.
