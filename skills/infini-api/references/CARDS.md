@@ -9,11 +9,13 @@ The merchant-facing card identifier is always `id`:
 - `data.id` from `POST /v2/cards/apply`
 - `cards[].id` from `GET /v2/cards/list`
 - `id` passed to `GET /v2/cards/status`
+- `id` passed to `GET /v2/cards/transactions`
 - `id` passed to `POST /v2/cards/reveal`
 - `id` passed to `POST /v2/cards/top-up`
 - `id` passed to `POST /v2/cards/redeem`
 - `id` passed to `POST /v2/cards/freeze`
 - `id` passed to `POST /v2/cards/unfreeze`
+- Values inside `card_ids` passed to `POST /v2/cards/status/batch`
 
 Do not invent or expose other internal card identifiers.
 
@@ -21,7 +23,7 @@ Do not invent or expose other internal card identifiers.
 
 | Permission | Endpoints |
 | --- | --- |
-| `card.create` | Apply, list, status, top up, redeem, freeze, and unfreeze. |
+| `card.create` | Apply, list, status, batch status, transactions, top up, redeem, freeze, and unfreeze. |
 | `card.reveal` | Reveal PAN/CVV/expiry. |
 
 API keys with card permissions should have a non-empty IP allowlist.
@@ -51,7 +53,7 @@ Product IDs:
 | --- | --- |
 | `1` | Infini Lite |
 | `2` | Infini Pro |
-| `101` | Infini AI |
+| `102` | Infini AI |
 
 Response data:
 
@@ -98,6 +100,72 @@ Status values:
 - `active`
 - `suspend`
 - `deleted`
+
+## Batch Get Card Statuses
+
+`POST /v2/cards/status/batch`
+
+Returns lifecycle statuses for up to 100 cards. Results follow the request order.
+
+Request:
+
+```json
+{
+  "card_ids": [
+    "a441831c-a5c7-4bed-8f61-793738afd5bc",
+    "b552942d-b6d8-5cef-9062-804849bfe6cd"
+  ]
+}
+```
+
+Required fields: `card_ids` with between `1` and `100` internal card IDs from apply or list.
+
+Response data:
+
+```json
+{
+  "cards": [
+    {
+      "card_id": "a441831c-a5c7-4bed-8f61-793738afd5bc",
+      "status": "active"
+    },
+    {
+      "card_id": "b552942d-b6d8-5cef-9062-804849bfe6cd",
+      "status": "pending"
+    }
+  ]
+}
+```
+
+## Get Card Transactions
+
+`GET /v2/cards/transactions?id={id}&page=1&page_size=20`
+
+Returns merchant-facing card IDs and does not expose provider transaction IDs.
+
+Query parameters:
+
+- `id`: internal card ID from apply or list
+- `page`: page number, default `1`
+- `page_size`: items per page, max `100`, default `20`
+
+Response data includes `transactions`, `total`, `page`, `page_size`, and `total_pages`.
+
+Transaction item fields include:
+
+- `card_id`
+- `type`
+- `amount`
+- `fee`
+- `status`
+- `currency`
+- `merchant`
+- `transaction_time`
+- `transaction_currency`
+- `transaction_amount`
+- `created_at`
+- `updated_at`
+- `settled_at`
 
 ## Reveal Card
 
