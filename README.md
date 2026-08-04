@@ -64,7 +64,9 @@ cp -R infini-skill/skills/infini-api/. ~/.cursor/skills/infini-api/
 
 - Production API: `https://openapi.infini.money`
 - Sandbox API: `https://openapi-sandbox.infini.money`
-- Merchant API prefix: `/v1/acquiring`
+- Merchant API prefix: `/v1/acquiring` for hosted checkout, payments, and subscriptions
+- Fund API prefix: `/v2/funds` for organization fund withdrawals, fees, and balances
+- Card API prefix: `/v2/cards`
 - Support: `dev@infini.money`
 
 ## License
