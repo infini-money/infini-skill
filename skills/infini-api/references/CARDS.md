@@ -9,13 +9,14 @@ The merchant-facing card identifier is always `id`:
 - `data.id` from `POST /v2/cards/apply`
 - `cards[].id` from `GET /v2/cards/list`
 - `id` passed to `GET /v2/cards/status`
+- `card_ids[]` passed to `POST /v2/cards/status/batch`
 - `id` passed to `GET /v2/cards/transactions`
 - `id` passed to `POST /v2/cards/reveal`
 - `id` passed to `POST /v2/cards/top-up`
 - `id` passed to `POST /v2/cards/redeem`
+- `card_id` passed to `POST /v2/cards/delete`
 - `id` passed to `POST /v2/cards/freeze`
 - `id` passed to `POST /v2/cards/unfreeze`
-- Values inside `card_ids` passed to `POST /v2/cards/status/batch`
 
 Do not invent or expose other internal card identifiers.
 
@@ -23,7 +24,7 @@ Do not invent or expose other internal card identifiers.
 
 | Permission | Endpoints |
 | --- | --- |
-| `card.create` | Apply, list, status, batch status, transactions, top up, redeem, freeze, and unfreeze. |
+| `card.create` | Apply, list, status, batch status, transactions, top up, redeem, delete, freeze, and unfreeze. |
 | `card.reveal` | Reveal PAN/CVV/expiry. |
 
 API keys with card permissions should have a non-empty IP allowlist.
@@ -99,6 +100,7 @@ Status values:
 - `pending`
 - `active`
 - `suspend`
+- `pending_delete`
 - `deleted`
 
 ## Batch Get Card Statuses
@@ -131,7 +133,7 @@ Response data:
     },
     {
       "card_id": "b552942d-b6d8-5cef-9062-804849bfe6cd",
-      "status": "pending"
+      "status": "pending_delete"
     }
   ]
 }
@@ -246,6 +248,31 @@ Response data:
 {
   "tx_id": "tx_123",
   "card_balance": "80.25"
+}
+```
+
+## Delete Card
+
+`POST /v2/cards/delete`
+
+Starts asynchronous deletion of an active organization card. A successful
+response means the card has entered `pending_delete`; remaining card funds are
+settled before the final status becomes `deleted`.
+
+Request:
+
+```json
+{
+  "card_id": "a441831c-a5c7-4bed-8f61-793738afd5bc"
+}
+```
+
+Response data:
+
+```json
+{
+  "success": true,
+  "message": "Card deletion initiated"
 }
 ```
 
