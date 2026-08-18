@@ -32,6 +32,7 @@ Error example:
 | 400 | `40016` | Unsupported order currency. |
 | 400 | `40017` | Order FX rate is temporarily unavailable. |
 | 401 | `401` | Invalid HMAC signature. |
+| 403 | `46001` | Buyer must complete Infini login and approved KYC before payment creation. |
 | 404 | `40401` | Order does not exist. |
 | 409 | `40902` | `client_reference` duplicate. |
 | 409 | `40906` | Order expired. |
@@ -101,6 +102,7 @@ Add that IP, or the correct NAT/proxy egress IP, to the API key whitelist in the
 - Unsupported currency: use uppercase `USD`, `EUR`, `KRW`, `GBP`, `SGD`, `JPY`, `AUD`, or `HKD`.
 - Zero-decimal amount error: use whole-number amounts for `JPY` and `KRW`.
 - FX rate unavailable: retry later or fall back to `USD` if that is acceptable for the merchant flow.
+- If `GET /v1/acquiring/order` returns `kyc_required=true`, do not expect unauthenticated `POST /v1/acquiring/payment` to work; redirect the buyer to hosted checkout or another Infini-authenticated flow.
 - Buyer says paid but order is processing: inspect `amount_confirming`, `amount_confirmed`, and payment transactions.
 - Expired order with payment: handle `order.late_payment` or `partial_paid` according to merchant policy.
 - Frontend redirect succeeded but webhook missing: query order and inspect webhook delivery logs/retry settings.
