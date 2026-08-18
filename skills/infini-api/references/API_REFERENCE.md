@@ -25,6 +25,7 @@ See `AUTH.md`.
 | `GET` | `/order/list` | List merchant orders. | HMAC |
 | `POST` | `/order/token/reissue` | Reissue checkout token. | HMAC |
 | `POST` | `/payment` | Create crypto payment. | HMAC |
+| `POST` | `/payment/quote` | Quote a payment without creating it. | HMAC |
 | `GET` | `/payment?payment_id={payment_id}` | Query payment. | HMAC |
 | `GET` | `/payment/list?order_id={order_id}` | List order payments. | HMAC |
 | `POST` | `/payment/binance` | Create Binance Pay payment. | HMAC |
@@ -55,6 +56,8 @@ See `AUTH.md`.
 ## Endpoint Notes
 
 - Hosted checkout uses `/order`, `/order?order_id=...`, and `/order/token/reissue`.
+- `GET /order` now includes `kyc_required`; when it is `true`, payment creation requires Infini-hosted login and approved KYC.
+- `POST /payment/quote` is the non-mutating preview route; `POST /payment` additionally accepts `force_create` to skip payment reuse.
 - The public docs may describe token reissue as `/token/reissue`; the current public service route mounts it under the order group as `/order/token/reissue`.
 - New fund integrations should use `/v2/funds/...`; the old `/v1/acquiring/fund/withdraw` routes remain only for backward compatibility.
 - Card APIs are not mounted under `/v1/acquiring`; use the full `/v2/cards/...` path when signing and sending card requests.
