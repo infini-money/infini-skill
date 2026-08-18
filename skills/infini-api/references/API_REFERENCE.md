@@ -25,6 +25,7 @@ See `AUTH.md`.
 | `GET` | `/order/list` | List merchant orders. | HMAC |
 | `POST` | `/order/token/reissue` | Reissue checkout token. | HMAC |
 | `POST` | `/payment` | Create crypto payment. | HMAC |
+| `POST` | `/payment/quote` | Quote a crypto payment without creating it. | HMAC |
 | `GET` | `/payment?payment_id={payment_id}` | Query payment. | HMAC |
 | `GET` | `/payment/list?order_id={order_id}` | List order payments. | HMAC |
 | `POST` | `/payment/binance` | Create Binance Pay payment. | HMAC |

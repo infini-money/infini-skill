@@ -57,6 +57,7 @@ Important fields:
 - `amount_confirmed`
 - `expires_at`
 - `exception_tag`
+- `kyc_required` — when `true`, the buyer must complete login and approved Infini KYC before a payment can be created for this order.
 - `email` — payer email submitted at order creation; omitted when not provided.
 - `last_paid_payment`
 
@@ -96,6 +97,7 @@ Response:
 
 - Create orders on the backend only.
 - Return only `checkout_url` and merchant-facing state to the frontend.
+- If `kyc_required` is `true`, keep the buyer on hosted checkout or another Infini-authenticated flow instead of calling the unauthenticated direct payment API.
 - Use webhooks as the primary source for fulfillment state.
 - Poll query order as a fallback or reconciliation job.
 - Do not fulfill solely on frontend redirect; redirects can be skipped or forged.
