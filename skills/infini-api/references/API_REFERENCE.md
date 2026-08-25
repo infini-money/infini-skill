@@ -1,6 +1,6 @@
 # API Reference
 
-Concise merchant-facing endpoint map. Hosted checkout, payments, and subscriptions use base path `/v1/acquiring`; fund endpoints use the independent `/v2/funds` prefix; card endpoints use the independent `/v2/cards` prefix.
+Concise merchant-facing endpoint map. Hosted checkout, payments, and subscriptions use base path `/v1/acquiring`; fund endpoints use the independent `/v2/funds` prefix; payout endpoints use the independent `/v2/payouts` prefix; card endpoints use the independent `/v2/cards` prefix.
 
 Use public documentation as the inclusion rule. A generated `api.json` may contain routes that are not part of the public merchant API; do not add those routes to this reference unless they are also covered by the public merchant documentation.
 
@@ -30,11 +30,16 @@ See `AUTH.md`.
 | `POST` | `/payment/binance` | Create Binance Pay payment. | HMAC |
 | `GET` | `/payment/binance?prepay_id={prepay_id}` | Query Binance Pay status. | HMAC |
 | `POST` | `/v2/funds/withdraw` | Apply organization withdraw. | HMAC + `fund.withdraw` |
-| `GET` | `/v2/funds/withdraw/status?request_id={request_id}` | Query organization withdraw status. | HMAC + `fund.withdraw` |
+| `GET` | `/v2/funds/withdraw/status?request_id={request_id}` | Query one organization withdraw status. | HMAC + `fund.withdraw` |
+| `POST` | `/v2/funds/withdraw/status/batch` | List organization withdraw statuses by time range. | HMAC + `fund.withdraw` |
 | `GET` | `/v2/funds/withdraw/fees` | List enabled withdrawal fees. | HMAC + `fund.withdraw` |
-| `GET` | `/v2/funds/balances` | Get available USDT and USDC balances. | HMAC + `fund.withdraw` |
+| `GET` | `/v2/funds/balances` | Get available USDT, USDC, and USD Cash balances. | HMAC + `fund.withdraw` |
 | `POST` | `/fund/withdraw` | Apply withdraw (legacy compatibility route). | HMAC |
 | `GET` | `/fund/withdraw?request_id={request_id}` | Query withdraw status (legacy compatibility route). | HMAC |
+| `POST` | `/v2/payouts/quotes` | Validate bank details and create a time-limited payout quote. | HMAC + `payout.write` |
+| `POST` | `/v2/payouts` | Create and immediately start a fiat payout. | HMAC + `payout.write` |
+| `POST` | `/v2/payouts/status/batch` | Batch query payout statuses. | HMAC + `payout.read` |
+| `GET` | `/v2/payouts/{payout_id}` | Query fiat payout status. | HMAC + `payout.read` |
 | `POST` | `/subscription` | Create subscription and first checkout order. | HMAC |
 | `GET` | `/subscription?merchant_sub_id={merchant_sub_id}` | Query subscription. | HMAC |
 | `POST` | `/subscription/cancel` | Cancel subscription. | HMAC |
@@ -57,6 +62,8 @@ See `AUTH.md`.
 - Hosted checkout uses `/order`, `/order?order_id=...`, and `/order/token/reissue`.
 - The public docs may describe token reissue as `/token/reissue`; the current public service route mounts it under the order group as `/order/token/reissue`.
 - New fund integrations should use `/v2/funds/...`; the old `/v1/acquiring/fund/withdraw` routes remain only for backward compatibility.
+- Fund status listing uses `POST /v2/funds/withdraw/status/batch` with a body window (`start_time`, `end_time`, `page`, `page_size`), not a `request_ids` array.
+- Payout APIs use the independent `/v2/payouts/...` prefix. `payout.write` is the sensitive permission that should always have an IP allowlist; `payout.read` is read-only.
 - Card APIs are not mounted under `/v1/acquiring`; use the full `/v2/cards/...` path when signing and sending card requests.
 - Webhook receiving URLs are merchant-owned, not Infini paths.
 - Exclude routes that appear only in generated service specs but are not covered by the public merchant documentation.
@@ -105,6 +112,12 @@ Withdraw:
 - `completed`
 - `failed`
 - `cancelled` (legacy `/v1/acquiring/fund/withdraw` only)
+
+Payout:
+
+- `processing`
+- `completed`
+- `failed`
 
 Subscription:
 
