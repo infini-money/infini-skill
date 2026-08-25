@@ -1,6 +1,6 @@
 ---
 name: infini-api
-description: Use when working with the Infini merchant API to integrate hosted checkout, HMAC-SHA256 authentication, order creation/querying, payment creation/querying, Binance Pay, withdrawals, subscriptions, organization cards, webhooks, error handling, or troubleshooting merchant API requests in Python, Node.js, TypeScript, Go, Java, or other backend languages.
+description: Use when working with the Infini merchant API to integrate hosted checkout, HMAC-SHA256 authentication, order creation/querying, payment creation/querying, Binance Pay, organization fund withdrawals, fiat payouts, subscriptions, organization cards, webhooks, error handling, or troubleshooting merchant API requests in Python, Node.js, TypeScript, Go, Java, or other backend languages.
 ---
 
 # Infini API Skill
@@ -13,7 +13,9 @@ API basics:
 
 - Production base URL: `https://openapi.infini.money`
 - Sandbox base URL: `https://openapi-sandbox.infini.money`
-- Merchant API prefix: `/v1/acquiring` for acquiring, payments, withdrawals, and subscriptions
+- Merchant API prefix: `/v1/acquiring` for hosted checkout, payments, subscriptions, and legacy fund withdrawals
+- Fund API prefix: `/v2/funds` for organization fund withdrawals, fees, and balances
+- Payout API prefix: `/v2/payouts` for fiat payout quotes, direct payouts, and payout status queries
 - Card API prefix: `/v2/cards`
 - Standard response envelope: `code`, `message`, `data`
 
@@ -29,7 +31,7 @@ Apply these defaults before writing code:
 - Verify every webhook with `X-Webhook-Signature`, `X-Webhook-Timestamp`, and `X-Webhook-Event-Id`.
 - Process webhooks idempotently using `X-Webhook-Event-Id`; return HTTP 200 quickly after validation and enqueue business work when needed.
 - Respect terminal order/subscription states. Do not roll a completed/canceled/expired local state backward because of late or duplicate webhooks.
-- Configure API key IP allowlists in the merchant dashboard, especially for card and withdrawal permissions.
+- Configure API key IP allowlists in the merchant dashboard, especially for `fund.withdraw`, `payout.write`, and card permissions.
 
 ## Reference Selection
 
@@ -40,6 +42,7 @@ Read only the reference files needed for the user request:
 - Hosted checkout orders: `references/HOSTED_CHECKOUT.md`
 - Programmatic crypto payments or Binance Pay: `references/PAYMENTS.md`
 - Withdrawals: `references/WITHDRAWALS.md`
+- Fiat payouts: `references/PAYOUTS.md`
 - Subscriptions: `references/SUBSCRIPTIONS.md`
 - Organization cards: `references/CARDS.md`
 - Webhooks: `references/WEBHOOKS.md`
@@ -57,6 +60,8 @@ For generated clients:
 - Build a small reusable request signer around `method`, exact path including query string, and optional JSON body.
 - Serialize JSON bodies consistently before calculating `Digest`; send exactly the serialized bytes that were digested.
 - Use the exact path in signatures, for example `/v1/acquiring/order?order_id=...`.
+- For fund APIs, use the exact `/v2/funds/...` path in signatures for new integrations. Keep `/v1/acquiring/fund/withdraw` only for backward-compatible legacy flows.
+- For payout APIs, use the exact `/v2/payouts/...` path in signatures and keep payout logic server-side because the requests contain sensitive bank-account data.
 - For card APIs, use the exact `/v2/cards/...` path in signatures, not `/v1/acquiring/card/...`.
 - Check both HTTP status and response `code`; business success is `code === 0`.
 - Keep hosted checkout as the default recommendation. Use payment APIs only when the merchant explicitly needs programmatic payment address or Binance Pay creation.
