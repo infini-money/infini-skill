@@ -57,6 +57,7 @@ See `AUTH.md`.
 - Hosted checkout uses `/order`, `/order?order_id=...`, and `/order/token/reissue`.
 - The public docs may describe token reissue as `/token/reissue`; the current public service route mounts it under the order group as `/order/token/reissue`.
 - New fund integrations should use `/v2/funds/...`; the old `/v1/acquiring/fund/withdraw` routes remain only for backward compatibility.
+- Withdrawal create accepts UUID or 28-character `BW`/`RW` request IDs; withdrawal status lookup also accepts `wdw_` identifiers.
 - Card APIs are not mounted under `/v1/acquiring`; use the full `/v2/cards/...` path when signing and sending card requests.
 - Webhook receiving URLs are merchant-owned, not Infini paths.
 - Exclude routes that appear only in generated service specs but are not covered by the public merchant documentation.

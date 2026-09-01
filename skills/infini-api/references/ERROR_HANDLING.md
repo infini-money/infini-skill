@@ -124,5 +124,6 @@ Add that IP, or the correct NAT/proxy egress IP, to the API key whitelist in the
 
 - Chain and token are uppercase.
 - Amount is a decimal string.
+- For `/v2/funds/withdraw`, `request_id` may be a UUID or a 28-character `BW`/`RW` identifier; status lookup also accepts `wdw_` identifiers.
 - Poll by `request_id`.
 - Treat `pending`, `processing`, `completed`, `failed`, and `cancelled` as distinct lifecycle states.
