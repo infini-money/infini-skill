@@ -29,7 +29,7 @@ Fields:
 
 | Field | Required | Notes |
 | --- | --- | --- |
-| `request_id` | No | Optional UUID idempotency key. Reuse it on retry. |
+| `request_id` | No | Optional idempotency key. Reuse it on retry. Accepted formats: UUID or 28-character `BW`/`RW` identifier. |
 | `chain` | Yes | Uppercase public chain name such as `ETHEREUM`, `ARBITRUM`, `SOLANA`, `BSC`, `BASE`, or `TRON`. |
 | `token_type` | Yes | For example `USDT`, `USDC`, `ETH`, `SOL`, `BNB`, or `TRX` depending on chain. |
 | `amount` | Yes | Positive decimal string. Digits after the sixth decimal place are truncated without rounding. |
@@ -55,6 +55,7 @@ Notes:
 - When the same merchant retries with the same `request_id`, the API returns the existing withdrawal with `data.is_duplicate = true`.
 - New integrations should query `GET /v2/funds/withdraw/fees` for the enabled chain/token pairs and their current fees instead of hard-coding a fee table.
 - API keys that include `fund.withdraw` should always be protected by a strict IP allowlist.
+- `GET /v2/funds/withdraw/status` accepts a UUID, a `wdw_` identifier, or a 28-character `BW`/`RW` identifier.
 
 ### Query Withdraw Status
 
