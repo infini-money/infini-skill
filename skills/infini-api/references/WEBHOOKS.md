@@ -17,7 +17,9 @@ Order event meanings:
 - `order.processing`: partial payment received or funds confirming.
 - `order.completed`: full amount received and confirmed.
 - `order.expired`: order expired.
-- `order.late_payment`: payment received within 24 hours after expiration.
+- `order.late_payment`: payment received after order expiration. Do not hard-code a 24-hour cutoff.
+
+For temporary on-chain payment addresses, Infini manages address retention separately from payment expiry, and the retention period can vary by merchant. Retention does not extend order or payment validity or guarantee that an expired address remains usable. Use the returned payment expiry and generate a new payment after it expires. Permanent invoice addresses are unaffected by this temporary-address retention policy.
 
 Subscription events:
 
