@@ -53,7 +53,7 @@ Response envelope:
 Notes:
 
 - When the same merchant retries with the same `request_id`, the API returns the existing withdrawal with `data.is_duplicate = true`.
-- New integrations should query `GET /v2/funds/withdraw/fees` for the enabled chain/token pairs and their current fees instead of hard-coding a fee table.
+- New integrations should query `GET /v2/funds/withdraw/fees` for the enabled chain/token pairs and global default fees instead of hard-coding a fee table. This is not an organization-specific fee quote.
 - API keys that include `fund.withdraw` should always be protected by a strict IP allowlist.
 
 ### Query Withdraw Status
@@ -91,6 +91,8 @@ Status values:
 ### List Withdrawal Fees
 
 `GET /v2/funds/withdraw/fees`
+
+Returns global default fees for enabled chain/token pairs. Actual withdrawals use the organization's configured fee, including an explicit zero fee. A business child account without its own fee inherits its root account's configured fee; if neither has a configured fee, the global default applies. The fee list does not resolve these organization overrides, so it may differ from the charged fee. Use `gas_fee` and `gas_fee_currency` from withdrawal status for reconciliation.
 
 Response envelope:
 
@@ -134,7 +136,7 @@ Response envelope:
 
 ### Supported Chains and Tokens
 
-Use `GET /v2/funds/withdraw/fees` as the source of truth. In current public docs:
+Use `GET /v2/funds/withdraw/fees` for enabled pairs and global default fees. Organization-specific fees can differ as described above. In current public docs:
 
 | Chain | Tokens | Fee |
 | --- | --- | --- |
