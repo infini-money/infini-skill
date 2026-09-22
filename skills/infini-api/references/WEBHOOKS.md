@@ -17,7 +17,7 @@ Order event meanings:
 - `order.processing`: partial payment received or funds confirming.
 - `order.completed`: full amount received and confirmed.
 - `order.expired`: order expired.
-- `order.late_payment`: payment received within 24 hours after expiration.
+- `order.late_payment`: payment matched after order expiration. There is no fixed 24-hour cutoff; temporary addresses use their saved hold deadline, while older payments and permanent invoice addresses use the configured payment grace period.
 
 Subscription events:
 
