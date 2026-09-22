@@ -41,6 +41,8 @@ Response data:
 
 ## Query Payment
 
+`expires_at` ends the Payment's quote and payment instructions. An expired crypto Payment's address may remain reserved internally, and a deposit during that hold can still match the original Payment as a late payment. The hold deadline is not part of the merchant API and varies by allocation. Never promise acceptance after `expires_at`; create a new Payment for new instructions and reconcile any late deposit through Payment/Order status and webhooks.
+
 `GET /v1/acquiring/payment?payment_id={payment_id}`
 
 Returns payment address, network, due amount, confirmed/confirming amounts, transactions, status, amount status, exception tags, crypto amount, channel fee, and order amount.
