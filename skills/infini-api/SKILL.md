@@ -40,6 +40,7 @@ Read only the reference files needed for the user request:
 - HMAC request signing: `references/AUTH.md`
 - Hosted checkout orders: `references/HOSTED_CHECKOUT.md`
 - Programmatic crypto payments or Binance Pay: `references/PAYMENTS.md`
+- Automatic refunds: `references/AUTOMATIC_REFUNDS.md`
 - Withdrawals: `references/WITHDRAWALS.md`
 - Subscriptions: `references/SUBSCRIPTIONS.md`
 - Organization cards: `references/CARDS.md`
