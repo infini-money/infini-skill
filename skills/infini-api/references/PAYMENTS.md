@@ -39,6 +39,12 @@ Response data:
 }
 ```
 
+### Choose a supported chain and token
+
+Call `GET /v1/acquiring/currency` before displaying or creating a direct crypto payment. The response is the authoritative list of chain/token pairs enabled for the authenticated merchant; do not hardcode a platform-wide list.
+
+BTC is available as a native `BTC`/`BTC` pair when it is enabled for the merchant. Currency availability can vary with merchant configuration.
+
 ## Query Payment
 
 `GET /v1/acquiring/payment?payment_id={payment_id}`
@@ -84,5 +90,6 @@ Status values include `created`, `success`, and `closed`.
 
 - Prefer hosted checkout unless the user explicitly needs direct payment address or Binance Pay objects.
 - Treat all amounts as decimal strings.
+- Treat the returned payment `expires_at` as authoritative. The default payment-address window is 1 hour for stablecoins, 30 minutes for ETH/SOL/TRX/BNB, and 2 hours for BTC; every payment is capped by its order expiration.
 - Use `payment_id` or `prepay_id` for polling and reconciliation.
 - Still rely on order webhooks for fulfillment.
