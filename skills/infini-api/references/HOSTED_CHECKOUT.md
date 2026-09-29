@@ -21,7 +21,7 @@ Request fields:
 | `merchant_alias` | No | Overrides configured display name for this order. |
 | `success_url` | No | Buyer redirect after success. |
 | `failure_url` | No | Buyer redirect after failure. |
-| `pay_methods` | No | Payment modes: `[1]` crypto, `[2]` card, `[3]` Binance Pay, `[5]` Apple Pay, `[6]` Google Pay, or a combined list such as `[1,2,3,5,6]`. Defaults to merchant config. |
+| `pay_methods` | No | Payment modes: `[1]` crypto, `[2]` card, `[3]` Binance Pay, `[5]` Apple Pay, `[6]` Google Pay, or a combined list such as `[1,2,3,5,6]` for methods enabled for the merchant. Apple Pay must also be provisioned for the merchant. Defaults to merchant config. |
 | `email` | No | Payer email. If provided, must be a valid email address; the server normalizes it to lowercase. |
 
 Currency notes:
@@ -29,6 +29,7 @@ Currency notes:
 - Use uppercase currency codes.
 - Use whole-number amounts for zero-decimal currencies `JPY` and `KRW`.
 - Use decimal strings for amounts in generated code to avoid floating-point rounding.
+- Hosted Checkout displays only acquiring assets and payment methods enabled for the merchant in the target environment. This can include BTC; do not assume that an asset or payment method is enabled from the request alone.
 
 Response data:
 
