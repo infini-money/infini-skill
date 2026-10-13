@@ -48,6 +48,7 @@ See `AUTH.md`.
 | `POST` | `/v2/cards/reveal` | Reveal PAN/CVV/expiry. | HMAC + `card.reveal` |
 | `POST` | `/v2/cards/top-up` | Top up organization card. | HMAC + `card.create` |
 | `POST` | `/v2/cards/redeem` | Redeem funds from organization card. | HMAC + `card.create` |
+| `POST` | `/v2/cards/delete` | Start asynchronous card deletion. | HMAC + `card.create` |
 | `POST` | `/v2/cards/freeze` | Freeze organization card. | HMAC + `card.create` |
 | `POST` | `/v2/cards/unfreeze` | Unfreeze organization card. | HMAC + `card.create` |
 | `POST` | merchant webhook URL | Infini order/subscription event push. | Verify webhook HMAC |
@@ -118,4 +119,5 @@ Card:
 - `pending`
 - `active`
 - `suspend`
+- `pending_delete`
 - `deleted`
