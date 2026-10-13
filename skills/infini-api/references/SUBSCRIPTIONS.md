@@ -38,6 +38,7 @@ Request:
 Outer order fields:
 
 - `request_id`, `amount`, and `subscription` are required.
+- The first-payment `amount` and recurring `subscription.amount` must be positive unsigned plain decimal strings; zero, negatives, signs, and exponent notation are rejected.
 - `currency` defaults to `USD`. Supported order currencies: `USD`, `EUR`, `KRW`, `GBP`, `SGD`, `JPY`, `AUD`, `HKD`.
 - Use whole-number first and recurring amounts for zero-decimal currencies `JPY` and `KRW`.
 - Public subscription docs currently describe `pay_methods` as `[1]` crypto, `[2]` card, or `[1,2]`, defaulting to merchant config.
@@ -48,7 +49,7 @@ Subscription fields:
 | --- | --- | --- |
 | `merchant_sub_id` | Yes | Merchant-defined subscription ID, unique per merchant. |
 | `plan_name` | Yes | Plan display name. |
-| `amount` | Yes | Recurring amount per period. |
+| `amount` | Yes | Positive unsigned plain decimal amount per period. |
 | `interval_unit` | Yes | `DAY` or `MONTH`. |
 | `interval_count` | Yes | Number of units per cycle, minimum 1. |
 | `payer_email` | Yes | Email used for invoice notifications. |
