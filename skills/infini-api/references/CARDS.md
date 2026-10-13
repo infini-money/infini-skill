@@ -73,6 +73,11 @@ Response data:
 
 `GET /v2/cards/list?status=active,pending&card_alias=Travel&page=1&page_size=20`
 
+Query parameters:
+
+- `page`: page number, from `1`; default `1`.
+- `page_size`: items per page, from `1` to `200`; default `20`.
+
 Response data includes `cards`, `total`, `page`, `page_size`, and `total_pages`.
 
 Card item fields include:
