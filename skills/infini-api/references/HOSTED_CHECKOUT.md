@@ -13,7 +13,7 @@ Request fields:
 | Field | Required | Notes |
 | --- | --- | --- |
 | `request_id` | Yes | Merchant idempotency key. Generate and persist before calling Infini. |
-| `amount` | Yes | Fiat amount. Use a decimal string. |
+| `amount` | Yes | Positive unsigned plain decimal string. Zero, negative values, signs, and exponent notation are rejected. |
 | `currency` | No | Defaults to `USD`. Supported order currencies: `USD`, `EUR`, `KRW`, `GBP`, `SGD`, `JPY`, `AUD`, `HKD`. |
 | `client_reference` | No | Merchant order number. Recommended unique. |
 | `order_desc` | No | Description shown in merchant records. |
@@ -29,6 +29,7 @@ Currency notes:
 - Use uppercase currency codes.
 - Use whole-number amounts for zero-decimal currencies `JPY` and `KRW`.
 - Use decimal strings for amounts in generated code to avoid floating-point rounding.
+- Order amounts must be positive unsigned plain decimals; do not use a sign or exponent notation.
 
 Response data:
 

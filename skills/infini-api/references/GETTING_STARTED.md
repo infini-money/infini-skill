@@ -67,6 +67,7 @@ Hosted Checkout is the default path:
 - Store API secrets server-side only.
 - Persist `request_id` before calling Infini.
 - Use decimal/string amounts.
+- Send every order amount as a positive unsigned plain decimal string; do not send zero, negatives, signs, or exponent notation.
 - Verify webhook signatures before parsing business meaning.
 - Deduplicate webhooks by `X-Webhook-Event-Id`.
 - Keep API key IP allowlists current.
