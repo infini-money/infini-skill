@@ -36,6 +36,7 @@ See `AUTH.md`.
 | `POST` | `/fund/withdraw` | Apply withdraw (legacy compatibility route). | HMAC |
 | `GET` | `/fund/withdraw?request_id={request_id}` | Query withdraw status (legacy compatibility route). | HMAC |
 | `POST` | `/subscription` | Create subscription and first checkout order. | HMAC |
+| `POST` | `/subscription/binance-pay` | Create Binance Pay Direct Debit subscription. | HMAC |
 | `GET` | `/subscription?merchant_sub_id={merchant_sub_id}` | Query subscription. | HMAC |
 | `POST` | `/subscription/cancel` | Cancel subscription. | HMAC |
 | `GET` | `/subscription/invoice/checkout` | User invoice checkout link. | Link/JWT flow |
