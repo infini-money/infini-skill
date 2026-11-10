@@ -45,11 +45,15 @@ Response data:
 
 Returns payment address, network, due amount, confirmed/confirming amounts, transactions, status, amount status, exception tags, crypto amount, channel fee, and order amount.
 
+`due_amount` is a token-denominated decimal **string**. Preserve it as returned rather than parsing it as a floating-point number: USD orders paid with USDT or USDC where the merchant bears the fee can carry meaningful trailing zeros, such as `"10.50"`.
+
 ## List Payments
 
 `GET /v1/acquiring/payment/list?order_id={order_id}`
 
 Returns all payment records for an order.
+
+Each item's `due_amount` follows the same decimal-string contract as Query Payment, including any trailing zeros.
 
 ## Binance Pay
 
