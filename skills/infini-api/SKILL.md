@@ -1,6 +1,6 @@
 ---
 name: infini-api
-description: Use when working with the Infini merchant API to integrate hosted checkout, HMAC-SHA256 authentication, order creation/querying, payment creation/querying, Binance Pay, withdrawals, subscriptions, organization cards, webhooks, error handling, or troubleshooting merchant API requests in Python, Node.js, TypeScript, Go, Java, or other backend languages.
+description: Use when working with the Infini merchant API to integrate hosted checkout, merchant customer deposits, HMAC-SHA256 or Ed25519 v2 authentication, order creation/querying, payment creation/querying, Binance Pay, withdrawals, subscriptions, organization cards, webhooks, error handling, or troubleshooting merchant API requests in Python, Node.js, TypeScript, Go, Java, or other backend languages.
 ---
 
 # Infini API Skill
@@ -14,6 +14,7 @@ API basics:
 - Production base URL: `https://openapi.infini.money`
 - Sandbox base URL: `https://openapi-sandbox.infini.money`
 - Merchant API prefix: `/v1/acquiring` for hosted checkout, payments, subscriptions, and legacy fund withdrawals
+- Merchant customer deposit prefix: `/v2/merchant-customer` (Ed25519 v2 authentication)
 - Fund API prefix: `/v2/funds` for organization fund withdrawals, fees, and balances
 - Card API prefix: `/v2/cards`
 - Standard response envelope: `code`, `message`, `data`
@@ -40,6 +41,7 @@ Read only the reference files needed for the user request:
 - HMAC request signing: `references/AUTH.md`
 - Hosted checkout orders: `references/HOSTED_CHECKOUT.md`
 - Programmatic crypto payments or Binance Pay: `references/PAYMENTS.md`
+- Merchant customer deposit addresses and settlement webhooks: `references/CUSTOMER_DEPOSITS.md`
 - Withdrawals: `references/WITHDRAWALS.md`
 - Subscriptions: `references/SUBSCRIPTIONS.md`
 - Organization cards: `references/CARDS.md`
@@ -60,6 +62,7 @@ For generated clients:
 - Use the exact path in signatures, for example `/v1/acquiring/order?order_id=...`.
 - For fund APIs, use the exact `/v2/funds/...` path in signatures for new integrations. Keep `/v1/acquiring/fund/withdraw` only for backward-compatible legacy flows.
 - For card APIs, use the exact `/v2/cards/...` path in signatures, not `/v1/acquiring/card/...`.
+- For merchant customer deposits, use Ed25519 v2 authentication and the exact `/v2/merchant-customer/...` path. Do not apply the legacy HMAC guidance in `references/AUTH.md` to this API.
 - Check both HTTP status and response `code`; business success is `code === 0`.
 - Keep hosted checkout as the default recommendation. Use payment APIs only when the merchant explicitly needs programmatic payment address or Binance Pay creation.
 - Include webhook handling for production payment flows; polling `GET` endpoints may be added as a reconciliation fallback.
