@@ -1,6 +1,6 @@
 # API Reference
 
-Concise merchant-facing endpoint map. Hosted checkout, payments, and subscriptions use base path `/v1/acquiring`; fund endpoints use the independent `/v2/funds` prefix; card endpoints use the independent `/v2/cards` prefix.
+Concise merchant-facing endpoint map. Hosted checkout, payments, and subscriptions use base path `/v1/acquiring`; fund endpoints use the independent `/v2/funds` prefix; card endpoints use the independent `/v2/cards` prefix; merchant customer deposits use `/v2/merchant-customer`.
 
 Use public documentation as the inclusion rule. A generated `api.json` may contain routes that are not part of the public merchant API; do not add those routes to this reference unless they are also covered by the public merchant documentation.
 
@@ -50,6 +50,12 @@ See `AUTH.md`.
 | `POST` | `/v2/cards/redeem` | Redeem funds from organization card. | HMAC + `card.create` |
 | `POST` | `/v2/cards/freeze` | Freeze organization card. | HMAC + `card.create` |
 | `POST` | `/v2/cards/unfreeze` | Unfreeze organization card. | HMAC + `card.create` |
+| `GET` | `/v2/merchant-customer/currencies` | List supported customer-deposit asset and network pairs. | Ed25519 + `merchant_customer.read` |
+| `POST` | `/v2/merchant-customer/customers` | Create or update a merchant customer. | Ed25519 + `merchant_customer.write` |
+| `GET` | `/v2/merchant-customer/customers` | Get one merchant customer. | Ed25519 + `merchant_customer.read` |
+| `GET` | `/v2/merchant-customer/customers/quota` | Get customer quota. | Ed25519 + `merchant_customer.read` |
+| `POST` | `/v2/merchant-customer/addresses` | Create or reuse a customer deposit-address binding. | Ed25519 + `merchant_customer.write` |
+| `GET` | `/v2/merchant-customer/addresses` | Get a customer deposit-address binding. | Ed25519 + `merchant_customer.read` |
 | `POST` | merchant webhook URL | Infini order/subscription event push. | Verify webhook HMAC |
 
 ## Endpoint Notes
@@ -58,6 +64,7 @@ See `AUTH.md`.
 - The public docs may describe token reissue as `/token/reissue`; the current public service route mounts it under the order group as `/order/token/reissue`.
 - New fund integrations should use `/v2/funds/...`; the old `/v1/acquiring/fund/withdraw` routes remain only for backward compatibility.
 - Card APIs are not mounted under `/v1/acquiring`; use the full `/v2/cards/...` path when signing and sending card requests.
+- Customer-deposit routes use Ed25519 v2, not the HMAC flow used by the acquiring, fund, and card routes. Read `CUSTOMER_DEPOSITS.md` before generating a deposit integration.
 - Webhook receiving URLs are merchant-owned, not Infini paths.
 - Exclude routes that appear only in generated service specs but are not covered by the public merchant documentation.
 
