@@ -6,8 +6,8 @@ AI Skill for Infini API integrations. Works with Claude Code, Cursor, and other 
 
 ## What This Skill Does
 
-- Generates secure Infini merchant API integration code for hosted checkout, payments, withdrawals, subscriptions, cards, and webhooks.
-- Explains and implements Infini HMAC-SHA256 request signing and webhook signature verification.
+- Generates secure Infini merchant API integration code for hosted checkout, customer deposits, payments, withdrawals, subscriptions, cards, and webhooks.
+- Explains and implements the required Infini HMAC-SHA256 or Ed25519 request signing and webhook signature verification.
 - Helps troubleshoot API errors, status transitions, idempotency issues, webhook delivery, and checkout flows.
 - Keeps security defaults front and center: backend-only secrets, unique `request_id`, IP allowlists, webhook idempotency, and decimal-safe amounts.
 
@@ -58,6 +58,7 @@ cp -R infini-skill/skills/infini-api/. ~/.cursor/skills/infini-api/
 - "Create a Python webhook handler for order.completed."
 - "Query an Infini withdrawal by request_id."
 - "Create and cancel an Infini subscription."
+- "Set up merchant customer deposit addresses and process settlement webhooks."
 - "Explain why my Infini request returns Invalid HMAC signature."
 
 ## Resources
@@ -65,6 +66,7 @@ cp -R infini-skill/skills/infini-api/. ~/.cursor/skills/infini-api/
 - Production API: `https://openapi.infini.money`
 - Sandbox API: `https://openapi-sandbox.infini.money`
 - Merchant API prefix: `/v1/acquiring`
+- Merchant customer deposit prefix: `/v2/merchant-customer`
 - Support: `dev@infini.money`
 
 ## License
