@@ -1,6 +1,6 @@
 # Webhooks
 
-Infini sends webhooks for order and subscription state changes.
+Infini sends webhooks for order, subscription, card, and Customer deposit state changes.
 
 ## Event Types
 
@@ -24,6 +24,15 @@ Subscription events:
 - `subscription.update`
 - `subscription.cancel`
 
+Customer deposit events:
+
+- `merchant_customer_deposit.confirming`: recognized receipt awaiting network confirmation.
+- `merchant_customer_deposit.confirmed`: network confirmed; merchant credit is not complete.
+- `merchant_customer_deposit.completed`: processing complete. Credit the user only from this event's actual `credited_amount` and `credited_currency`; a zero amount has no merchant ledger transaction.
+- `merchant_customer_deposit.failed`: recognized receipt explicitly failed or became invalid on-chain.
+
+Customer deposit and card events use the versioned envelope `{id,event,version,occurred_at,data}`. Deduplicate delivery by `X-Webhook-Event-Id` and final customer-credit processing by `data.deposit_id`; arrivals can be delayed, duplicated, or out of order. Do not regress a completed deposit from an older event.
+
 ## Headers
 
 Every webhook should include:
@@ -31,6 +40,7 @@ Every webhook should include:
 - `Content-Type: application/json`
 - `X-Webhook-Timestamp`
 - `X-Webhook-Event-Id`
+- `X-Webhook-Signature-Version` (`v1`)
 - `X-Webhook-Signature`
 
 Use `X-Webhook-Event-Id` for idempotency.

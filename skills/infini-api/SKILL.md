@@ -1,6 +1,6 @@
 ---
 name: infini-api
-description: Use when working with the Infini merchant API to integrate hosted checkout, HMAC-SHA256 authentication, order creation/querying, payment creation/querying, Binance Pay, withdrawals, subscriptions, organization cards, webhooks, error handling, or troubleshooting merchant API requests in Python, Node.js, TypeScript, Go, Java, or other backend languages.
+description: Use when working with the Infini merchant API to integrate hosted checkout, HMAC-SHA256 or Ed25519 authentication, Customer deposits, order creation/querying, payment creation/querying, Binance Pay, withdrawals, subscriptions, organization cards, webhooks, error handling, or troubleshooting merchant API requests in Python, Node.js, TypeScript, Go, Java, or other backend languages.
 ---
 
 # Infini API Skill
@@ -16,6 +16,7 @@ API basics:
 - Merchant API prefix: `/v1/acquiring` for hosted checkout, payments, subscriptions, and legacy fund withdrawals
 - Fund API prefix: `/v2/funds` for organization fund withdrawals, fees, and balances
 - Card API prefix: `/v2/cards`
+- Customer Deposit API prefix: `/v2/merchant-customer` (Ed25519 v2 request authentication)
 - Standard response envelope: `code`, `message`, `data`
 
 ## Security Requirements
@@ -27,6 +28,7 @@ Apply these defaults before writing code:
 - Generate a globally unique `request_id` for create calls and persist it before calling Infini. Reuse it on retry.
 - Treat money as strings or decimal types. Never use float/double for payment amounts.
 - Send `Digest` for requests with a body, but do not include the body digest in the signing string.
+- Use the Customer Deposit API's Ed25519 v2 headers and signature format for `/v2/merchant-customer`; do not reuse the HMAC request signer for that API.
 - Verify every webhook with `X-Webhook-Signature`, `X-Webhook-Timestamp`, and `X-Webhook-Event-Id`.
 - Process webhooks idempotently using `X-Webhook-Event-Id`; return HTTP 200 quickly after validation and enqueue business work when needed.
 - Respect terminal order/subscription states. Do not roll a completed/canceled/expired local state backward because of late or duplicate webhooks.
@@ -43,6 +45,7 @@ Read only the reference files needed for the user request:
 - Withdrawals: `references/WITHDRAWALS.md`
 - Subscriptions: `references/SUBSCRIPTIONS.md`
 - Organization cards: `references/CARDS.md`
+- Customer deposits: `references/CUSTOMER_DEPOSITS.md`
 - Webhooks: `references/WEBHOOKS.md`
 - Error handling and troubleshooting: `references/ERROR_HANDLING.md`
 - Endpoint map: `references/API_REFERENCE.md`
@@ -60,6 +63,7 @@ For generated clients:
 - Use the exact path in signatures, for example `/v1/acquiring/order?order_id=...`.
 - For fund APIs, use the exact `/v2/funds/...` path in signatures for new integrations. Keep `/v1/acquiring/fund/withdraw` only for backward-compatible legacy flows.
 - For card APIs, use the exact `/v2/cards/...` path in signatures, not `/v1/acquiring/card/...`.
+- For Customer Deposit APIs, use the exact `/v2/merchant-customer/...` path and Ed25519 v2 signing; retain the Customer ID as an integer, not a JavaScript number when it might lose precision.
 - Check both HTTP status and response `code`; business success is `code === 0`.
 - Keep hosted checkout as the default recommendation. Use payment APIs only when the merchant explicitly needs programmatic payment address or Binance Pay creation.
 - Include webhook handling for production payment flows; polling `GET` endpoints may be added as a reconciliation fallback.
